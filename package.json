@@ -1,0 +1,19 @@
+{
+  "name": "syncema-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SBence/syncema-server.git"
+  },
+  "author": "SBence",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/SBence/syncema-server/issues"
+  },
+  "homepage": "https://github.com/SBence/syncema-server#readme"
+}
