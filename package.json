@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SBence/syncema-server/issues"
   },
-  "homepage": "https://github.com/SBence/syncema-server#readme"
+  "homepage": "https://github.com/SBence/syncema-server#readme",
+  "devDependencies": {
+    "eslint": "^8.16.0"
+  }
 }
