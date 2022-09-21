@@ -43,7 +43,7 @@ export default function eventHandler(io, socket) {
     const details = (await ytdl.getBasicInfo(videoURL)).videoDetails;
 
     rooms[roomID].queue.push({
-      URL: videoURL,
+      url: videoURL,
       title: details.title,
       queuedByID: userID,
       queuedBy: username,
