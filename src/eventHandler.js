@@ -58,4 +58,12 @@ export default function eventHandler(io, socket) {
 
     io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
   });
+
+  socket.on("removeVideo", async ({ userID, videoIndex }) => {
+    const roomID = users[userID].room;
+
+    rooms[roomID].queue.splice(videoIndex, 1);
+
+    io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
+  });
 }
