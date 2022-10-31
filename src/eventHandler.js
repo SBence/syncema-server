@@ -22,6 +22,9 @@ export default function eventHandler(io, socket) {
 
     socket.join(roomID);
     socket.emit("joinedRoom", { roomID, userID });
+
+    io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
+    io.to(roomID).emit("newMessage", rooms[roomID].messages);
   });
 
   socket.on("sendMessage", async ({ userID, content }) => {
