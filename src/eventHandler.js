@@ -4,6 +4,11 @@ import secondsToString from "./utils/secondsToString.js";
 import addToRoom from "./utils/room/addToRoom.js";
 import generateID from "./utils/generateID.js";
 
+const directionMap = {
+  up: -1,
+  down: 1,
+};
+
 export default function eventHandler(io, socket) {
   socket.on("joinRoom", async ({ roomID, userID, username }) => {
     if (!userID) {
@@ -66,6 +71,25 @@ export default function eventHandler(io, socket) {
     const roomID = users[userID].room;
 
     rooms[roomID].queue.splice(videoIndex, 1);
+
+    io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
+  });
+
+  socket.on("moveVideo", async ({ userID, videoIndex, direction }) => {
+    const roomID = users[userID].room;
+    const roomQueue = rooms[roomID].queue;
+
+    if (
+      (videoIndex === 0 && direction === "up") ||
+      (videoIndex === roomQueue.length - 1 && direction === "down")
+    ) {
+      return;
+    }
+
+    [roomQueue[videoIndex], roomQueue[videoIndex + directionMap[direction]]] = [
+      roomQueue[videoIndex + directionMap[direction]],
+      roomQueue[videoIndex],
+    ];
 
     io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
   });
