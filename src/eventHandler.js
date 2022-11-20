@@ -93,4 +93,28 @@ export default function eventHandler(io, socket) {
 
     io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
   });
+
+  socket.on("seekTo", async ({ userID, time }) => {
+    const roomID = users[userID].room;
+    socket.to(roomID).emit("videoSeek", time);
+    console.log(`Seeked to: ${time} by user: ${userID} in room: ${roomID}`);
+  });
+
+  socket.on("pauseVideo", async ({ userID }) => {
+    const roomID = users[userID].room;
+    if (rooms[roomID].playing) {
+      socket.to(roomID).emit("videoPause");
+      rooms[roomID].playing = false;
+      console.log(`Video paused by user: ${userID} in room: ${roomID}`);
+    }
+  });
+
+  socket.on("playVideo", async ({ userID }) => {
+    const roomID = users[userID].room;
+    if (!rooms[roomID].playing) {
+      socket.to(roomID).emit("videoPlay");
+      rooms[roomID].playing = true;
+      console.log(`Video played by user: ${userID} in room: ${roomID}`);
+    }
+  });
 }
