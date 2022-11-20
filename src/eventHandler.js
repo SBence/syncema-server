@@ -48,7 +48,15 @@ export default function eventHandler(io, socket) {
     const username = users[userID].name;
     const roomID = users[userID].room;
 
-    const details = (await ytdl.getBasicInfo(videoURL)).videoDetails;
+    let details;
+    try {
+      details = (await ytdl.getBasicInfo(videoURL)).videoDetails;
+    } catch (error) {
+      console.log(
+        `Failed to get video info for URL: ${videoURL} queued by user: ${userID} in room: ${roomID}`
+      );
+      return error;
+    }
 
     rooms[roomID].queue.push({
       url: videoURL,
