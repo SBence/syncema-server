@@ -18,6 +18,7 @@ export default function addToRoom(roomID, userID, username) {
           name: username,
         },
       },
+      playing: false,
       queue: [],
       messages: [],
     };
