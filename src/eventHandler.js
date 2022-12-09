@@ -126,4 +126,10 @@ export default function eventHandler(io, socket) {
       console.log(`Video played by user: ${userID} in room: ${roomID}`);
     }
   });
+
+  socket.on("disconnecting", () => {
+    for (const room of socket.rooms) {
+      socket.to(room).emit("memberLeft"); // TODO: More info, send username
+    }
+  });
 }
