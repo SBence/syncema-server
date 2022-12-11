@@ -132,4 +132,10 @@ export default function eventHandler(io, socket) {
       socket.to(room).emit("memberLeft"); // TODO: More info, send username
     }
   });
+
+  socket.on("changeName", ({ roomID, userID, username }) => {
+    users[userID].name = username;
+    rooms[roomID].members[userID].name = username;
+    socket.emit("nameChanged", username);
+  });
 }
