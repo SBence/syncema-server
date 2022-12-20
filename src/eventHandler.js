@@ -142,9 +142,9 @@ export default function eventHandler(io, socket) {
     }
   });
 
-  socket.on("changeName", ({ roomID, userID, username }) => {
+  socket.on("changeName", ({ userID, username }) => {
     users[userID].name = username;
-    rooms[roomID].members[userID].name = username;
+    rooms[users[userID].room].members[userID].name = username;
     socket.emit("nameChanged", username);
   });
 }
