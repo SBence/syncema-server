@@ -9,6 +9,10 @@ const directionMap = {
   down: 1,
 };
 
+function onRoomError(socket) {
+  socket.emit("roomError");
+}
+
 export default function eventHandler(io, socket) {
   socket.on("joinRoom", async ({ roomID, userID, username }) => {
     if (!userID) {
@@ -34,6 +38,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("sendMessage", async ({ userID, content }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const username = users[userID].name;
     const roomID = users[userID].room;
 
@@ -46,6 +52,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("enqueueVideo", async ({ userID, videoURL }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const username = users[userID].name;
     const roomID = users[userID].room;
 
@@ -77,6 +85,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("removeVideo", async ({ userID, videoIndex }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
 
     rooms[roomID].queue.splice(videoIndex, 1);
@@ -85,6 +95,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("moveVideo", async ({ userID, videoIndex, direction }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
     const roomQueue = rooms[roomID].queue;
 
@@ -104,6 +116,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("makeFirst", async ({ userID, videoIndex }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
     const roomQueue = rooms[roomID].queue;
 
@@ -113,12 +127,16 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("seekTo", async ({ userID, time }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
     socket.to(roomID).emit("videoSeek", time);
     console.log(`Seeked to: ${time} by user: ${userID} in room: ${roomID}`);
   });
 
   socket.on("pauseVideo", async ({ userID }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
     if (rooms[roomID].playing) {
       socket.to(roomID).emit("videoPause");
@@ -128,6 +146,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("playVideo", async ({ userID }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     const roomID = users[userID].room;
     if (!rooms[roomID].playing) {
       socket.to(roomID).emit("videoPlay");
@@ -143,6 +163,8 @@ export default function eventHandler(io, socket) {
   });
 
   socket.on("changeName", ({ userID, username }) => {
+    if (!users[userID]) return onRoomError(socket);
+
     users[userID].name = username;
     rooms[users[userID].room].members[userID].name = username;
     socket.emit("nameChanged", username);
