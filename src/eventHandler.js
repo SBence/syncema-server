@@ -32,7 +32,7 @@ export default function eventHandler(io, socket) {
     socket.join(roomID);
     socket.emit("joinedRoom", { roomID, userID });
 
-    socket.to(roomID).emit("memberJoined", username); // TODO: More info?
+    socket.to(roomID).emit("memberJoined", username);
     io.to(roomID).emit("queueUpdate", rooms[roomID].queue);
     io.to(roomID).emit("newMessage", rooms[roomID].messages);
   });
@@ -158,7 +158,7 @@ export default function eventHandler(io, socket) {
 
   socket.on("disconnecting", () => {
     for (const room of socket.rooms) {
-      socket.to(room).emit("memberLeft"); // TODO: More info, send username
+      socket.to(room).emit("memberLeft");
     }
   });
 
