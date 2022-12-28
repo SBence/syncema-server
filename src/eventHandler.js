@@ -61,6 +61,7 @@ export default function eventHandler(io, socket) {
     try {
       details = (await ytdl.getBasicInfo(videoURL)).videoDetails;
     } catch (error) {
+      socket.emit("videoAddError");
       console.log(
         `Failed to get video info for URL: ${videoURL} queued by user: ${userID} in room: ${roomID}`
       );
